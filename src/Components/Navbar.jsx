@@ -7,8 +7,9 @@ const Navbar = () => {
   const handleLogout = () => {
     setIsLoggedIn(false);
   };
-
+  console.log("Navbar is being rendered");
   return (
+
     <nav className="bg-gradient-to-r from-gray-900 to-black text-white shadow-lg p-4">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
