@@ -1,111 +1,136 @@
-# React + Vite
+To-Do App - React + Redux + Local Storage + Authentication
+This To-Do Application is built using React.js, Redux Toolkit, and Local Storage, allowing users to register, log in, and manage their tasks efficiently. The application supports task prioritization, persistent storage, real-time weather updates, and protected routes for a smooth user experience.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+📌 Features
+User Authentication: Register and login functionalities are implemented using localStorage.
 
-Currently, two official plugins are available:
+Protected Routes: Only authenticated users can access the To-Do list.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
- List file code
- /* eslint-disable react/prop-types */
-import { MdCheck, MdDeleteForever } from "react-icons/md";
+Redux-powered Task Management: Users can add, edit, delete, and sort tasks based on priority.
 
- const TodoList = ({
-  data,
-  checked,
-  onHandleDeleteTodo,
-  onHandleCheckedTodo,
-}) => {
-  return (
-    <li className="todo-item">
-      <span className={checked ? "checkList" : "notCheckList"}>{data}</span>
-      <button className="check-btn" onClick={() => onHandleCheckedTodo(data)}>
-        <MdCheck />
-      </button>
-      <button className="delete-btn" onClick={() => onHandleDeleteTodo(data)}>
-        <MdDeleteForever />
-      </button>
-    </li>
-  );
-};
-export default TodoList;
+Local Storage Integration: Tasks persist even after a page refresh.
 
+Real-time Weather Information: Fetches live weather updates from the Weather API.
 
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { taskAction } from "../store/Task";
+Gradient UI Enhancements: A modern and visually appealing interface.
 
-export const TodoForm = () => {
-  const [content, setContent] = useState("");
-  const [priority, setPriority] = useState("Medium"); // Default priority
-  const dispatch = useDispatch();
+Netlify Deployment Ready: Configured with \_redirects to handle client-side routing.
 
-  const handleInputChange = (event) => {
-    setContent(event.target.value);
-  };
+🛠️ Technologies Used
+This project leverages the following technologies:
 
-  const handlePriorityChange = (event) => {
-    setPriority(event.target.value);
-  };
+Technology Description
+React.js ::> JavaScript library for building UI components.
+Vite ::> Fast development environment for React apps.
+React Router ::> Manages navigation and protected routes.
+Redux Toolkit ::> Efficient state management for tasks.
+Local Storage ::> Stores user authentication and tasks persistently.
+Tailwind CSS ::> Provides a sleek and responsive design.
+Weather API::> Fetches real-time weather updates.
+Netlify ::>Hosts and deploys the application.
+📂 Project Structure
+The project follows a structured folder hierarchy:
 
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
-    if (content.trim()) {
-      const newTask = {
-        id: Date.now(),
-        content,
-        priority, // Include priority in the task
-        checked: false,
-      };
-      dispatch(taskAction.addTask(newTask)); // Dispatch addTask action
-      setContent("");
-      setPriority("Medium"); // Reset priority to default
-    }
-  };
+bash
+Copy
+Edit
+/To-Do-App
+│── /public # Stores the \_redirects file for Netlify
+│── /src
+│ │── /Components
+│ │ ├── Navbar.jsx # Navigation bar (Register, Login, Logout)
+│ │ ├── Login.jsx # User login form
+│ │ ├── Register.jsx # User registration form
+│ │ ├── Logout.jsx # Logout functionality
+│ │ ├── Todo.jsx # Main To-Do List component
+│ │ ├── Weather.jsx # Weather fetching component
+│ │ ├── TodoDate.jsx # Displays current date
+│ │── /store # Redux store & reducers
+│ ├── App.jsx # Routes and protected route handling
+│ ├── main.jsx # React entry point
+│── /dist # Build folder (generated after running the build command)
+│── package.json # Dependencies & scripts
+│── vite.config.js # Vite configuration
+│── .gitignore # Files to ignore in Git
+│── README.md # Project Documentation
+📝 User Authentication Flow
 
-  return (
-    <section className="bg-white p-6 shadow-lg rounded-lg border border-gray-300">
-      <form onSubmit={handleFormSubmit} className="space-y-4">
-        {/* Task Input */}
-        <div className="relative">
-          <input
-            type="text"
-            className="w-full p-4 text-lg border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
-            autoComplete="off"
-            value={content}
-            onChange={handleInputChange}
-            placeholder="Add a new task..."
-          />
-        </div>
+1. User Registration
+   Users need to enter an email and password to create an account.
 
-        {/* Priority Dropdown */}
-        <div>
-          <select
-            className="w-full p-3 bg-gray-100 border rounded-lg cursor-pointer focus:ring-2 focus:ring-blue-400"
-            value={priority}
-            onChange={handlePriorityChange}
-          >
-            <option value="High">🔥 High Priority</option>
-            <option value="Medium">⚡ Medium Priority</option>
-            <option value="Low">✅ Low Priority</option>
-          </select>
-        </div>
+Registration data is stored in localStorage.
 
-        {/* Submit Button */}
-        <div>
-          <button
-            type="submit"
-            disabled={!content.trim()}
-            className={`w-full p-3 text-white font-semibold rounded-lg transition-all duration-200 ${
-              content.trim()
-                ? "bg-gradient-to-r from-blue-500 to-purple-600 hover:opacity-90"
-                : "bg-gray-300 cursor-not-allowed"
-            }`}
-          >
-            Add Task
-          </button>
-        </div>
-      </form>
-    </section>
-  );
-};
+Upon successful registration, users are redirected to the login page.
+
+2. User Login
+   Users enter their email and password to authenticate.
+
+If credentials match the stored user data, an isAuthenticated flag is set in localStorage.
+
+Upon successful login, users are redirected to the To-Do page.
+
+3. Protected Routes
+   Users cannot access the To-Do page without logging in.
+
+If an unauthenticated user tries to access /todo, they are redirected to the login page.
+
+4. Logout
+   The user can log out, which clears the isAuthenticated flag from localStorage.
+
+After logout, the user is redirected to the login page.
+
+📝 Task Management with Redux
+The To-Do list is powered by Redux Toolkit, allowing for efficient task management and state persistence.
+
+Adding a Task: Users can add tasks along with priority selection (High, Medium, Low).
+
+Editing a Task: Users can modify the task content and priority.
+
+Deleting a Task: Users can remove tasks from the list.
+
+Sorting Tasks: Tasks are automatically sorted by priority (High → Medium → Low).
+
+Persistent Storage: Tasks remain even after refreshing the page, as they are stored in localStorage.
+
+🌦️ Weather Integration
+The app integrates a Weather API to fetch real-time weather updates. The following weather details are displayed:
+
+City Name
+
+Current Weather Description
+
+Temperature (°C)
+
+Humidity (%)
+
+🚀 Deployment on Netlify
+To ensure smooth client-side routing, a \_redirects file is needed inside the public/ folder with the following content:
+
+bash
+Copy
+Edit
+/\* /index.html 200
+Deployment Steps:
+Build the project
+
+Run the build command to generate a dist folder:
+
+arduino
+Copy
+Edit
+npm run build
+Upload the dist folder to Netlify for hosting.
+
+🔮 Future Enhancements
+Dark Mode Support for better UI accessibility.
+
+Task Due Dates & Notifications to remind users of deadlines.
+
+Drag & Drop Functionality to reorder tasks easily.
+
+User Authentication with Firebase for improved security.
+
+👨‍💻 Developed By
+This project was developed by Shishir Dubey.
+
+If you find this project helpful, star ⭐ the repository and contribute to its growth! 🚀
